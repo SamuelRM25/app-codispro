@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { testConnection } = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
+const projectRoutes = require('./routes/projectRoutes');
 
 require('dotenv').config();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rutas
 app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {

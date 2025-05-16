@@ -1,33 +1,31 @@
 const jwt = require('jsonwebtoken');
 
-const authMiddleware = (req, res, next) => {
+exports.authenticate = (req, res, next) => {
   try {
-    // Verificar si existe el token en los headers
+    // Obtener el token del encabezado
     const authHeader = req.headers.authorization;
+    
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Acceso no autorizado. Token no proporcionado' 
+      return res.status(401).json({
+        success: false,
+        message: 'Acceso no autorizado. Token no proporcionado'
       });
     }
-
-    // Extraer el token
+    
     const token = authHeader.split(' ')[1];
-
+    
     // Verificar el token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // Agregar la información del usuario al request
+    // Agregar el usuario al objeto de solicitud
     req.user = decoded;
     
     next();
   } catch (error) {
     console.error('Error de autenticación:', error);
-    return res.status(401).json({ 
-      success: false, 
-      message: 'Acceso no autorizado. Token inválido o expirado' 
+    return res.status(401).json({
+      success: false,
+      message: 'Acceso no autorizado. Token inválido'
     });
   }
 };
-
-module.exports = authMiddleware;
