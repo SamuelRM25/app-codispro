@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { initDatabase } = require('./db/db_config');
 const authRoutes = require('./routes/auth_routes');
+const projectRoutes = require('./routes/project_routes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ initDatabase();
 
 // Rutas
 app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
