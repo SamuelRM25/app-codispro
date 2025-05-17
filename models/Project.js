@@ -1,11 +1,10 @@
 const db = require('../config/database');
 
 class Project {
-  static async getAll(userId) {
+  static async getAll() {
     try {
       const [rows] = await db.execute(
-        'SELECT * FROM projectos WHERE user_id = ? ORDER BY creado DESC',
-        [userId]
+        'SELECT * FROM proyectos ORDER BY creado DESC'
       );
       return rows;
     } catch (error) {
@@ -13,11 +12,11 @@ class Project {
     }
   }
 
-  static async getById(id, userId) {
+  static async getById(id) {
     try {
       const [rows] = await db.execute(
-        'SELECT * FROM projectos WHERE id_proyecto = ? AND user_id = ?',
-        [id, userId]
+        'SELECT * FROM proyectos WHERE id_proyecto = ?',
+        [id]
       );
       return rows[0];
     } catch (error) {
@@ -25,13 +24,13 @@ class Project {
     }
   }
 
-  static async create(projectData, userId) {
+  static async create(projectData) {
     try {
       const { name, location, startDate, endDate, latitude, longitude } = projectData;
       
       const [result] = await db.execute(
-        'INSERT INTO projectos (name_proyecto, location_proyecto, fechaInicio_proyecto, fechaFin_proyecto, latitude, longitude, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [name, location, startDate, endDate, latitude, longitude, userId]
+        'INSERT INTO proyectos (name_proyecto, location_proyecto, fechaInicio_proyecto, fechaFin_proyecto, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)',
+        [name, location, startDate, endDate, latitude, longitude]
       );
       
       return {
@@ -41,21 +40,20 @@ class Project {
         fechaInicio_proyecto: startDate,
         fechaFin_proyecto: endDate,
         latitude: latitude,
-        longitude: longitude,
-        user_id: userId
+        longitude: longitude
       };
     } catch (error) {
       throw error;
     }
   }
 
-  static async update(id, projectData, userId) {
+  static async update(id, projectData) {
     try {
       const { name, location, startDate, endDate, latitude, longitude } = projectData;
       
       await db.execute(
-        'UPDATE projectos SET name_proyecto = ?, location_proyecto = ?, fechaInicio_proyecto = ?, fechaFin_proyecto = ?, latitude = ?, longitude = ? WHERE id_proyecto = ? AND user_id = ?',
-        [name, location, startDate, endDate, latitude, longitude, id, userId]
+        'UPDATE proyectos SET name_proyecto = ?, location_proyecto = ?, fechaInicio_proyecto = ?, fechaFin_proyecto = ?, latitude = ?, longitude = ? WHERE id_proyecto = ?',
+        [name, location, startDate, endDate, latitude, longitude, id]
       );
       
       return {
@@ -65,19 +63,18 @@ class Project {
         fechaInicio_proyecto: startDate,
         fechaFin_proyecto: endDate,
         latitude: latitude,
-        longitude: longitude,
-        user_id: userId
+        longitude: longitude
       };
     } catch (error) {
       throw error;
     }
   }
 
-  static async delete(id, userId) {
+  static async delete(id) {
     try {
       await db.execute(
-        'DELETE FROM projectos WHERE id_proyecto = ? AND user_id = ?',
-        [id, userId]
+        'DELETE FROM proyectos WHERE id_proyecto = ?',
+        [id]
       );
       return true;
     } catch (error) {

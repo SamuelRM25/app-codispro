@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const projectController = require('../controllers/projectController');
-const { authenticate } = require('../middleware/authMiddleware');
+const authMiddleware = require('../middleware/authMiddleware');
 
-// Aplicar middleware de autenticación a todas las rutas
-router.use(authenticate);
+// Rutas públicas (si las necesitas)
+// router.get('/public', projectController.getPublicProjects);
 
-// Rutas para proyectos
-router.get('/', projectController.getProjects);
-router.get('/:id', projectController.getProject);
-router.post('/', projectController.createProject);
-router.put('/:id', projectController.updateProject);
-router.delete('/:id', projectController.deleteProject);
+// Rutas protegidas
+router.get('/', authMiddleware.authenticate, projectController.getAllProjects);
+router.get('/:id', authMiddleware.authenticate, projectController.getProjectById);
+router.post('/', authMiddleware.authenticate, projectController.createProject);
+router.put('/:id', authMiddleware.authenticate, projectController.updateProject);
+router.delete('/:id', authMiddleware.authenticate, projectController.deleteProject);
 
 module.exports = router;
