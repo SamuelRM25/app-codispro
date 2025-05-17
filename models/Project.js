@@ -1,9 +1,9 @@
-const db = require('../config/database');
+const { pool } = require('../config/database');
 
 class Project {
   static async getAll() {
     try {
-      const [rows] = await db.execute(
+      const [rows] = await pool.query(
         'SELECT * FROM proyectos ORDER BY creado DESC'
       );
       return rows;
@@ -14,7 +14,7 @@ class Project {
 
   static async getById(id) {
     try {
-      const [rows] = await db.execute(
+      const [rows] = await pool.query(
         'SELECT * FROM proyectos WHERE id_proyecto = ?',
         [id]
       );
@@ -28,7 +28,7 @@ class Project {
     try {
       const { name, location, startDate, endDate, latitude, longitude } = projectData;
       
-      const [result] = await db.execute(
+      const [result] = await pool.query(
         'INSERT INTO proyectos (name_proyecto, location_proyecto, fechaInicio_proyecto, fechaFin_proyecto, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)',
         [name, location, startDate, endDate, latitude, longitude]
       );
@@ -51,7 +51,7 @@ class Project {
     try {
       const { name, location, startDate, endDate, latitude, longitude } = projectData;
       
-      await db.execute(
+      await pool.query(
         'UPDATE proyectos SET name_proyecto = ?, location_proyecto = ?, fechaInicio_proyecto = ?, fechaFin_proyecto = ?, latitude = ?, longitude = ? WHERE id_proyecto = ?',
         [name, location, startDate, endDate, latitude, longitude, id]
       );
@@ -72,7 +72,7 @@ class Project {
 
   static async delete(id) {
     try {
-      await db.execute(
+      await pool.query(
         'DELETE FROM proyectos WHERE id_proyecto = ?',
         [id]
       );

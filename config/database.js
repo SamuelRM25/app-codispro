@@ -1,20 +1,19 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-// Configuración de la conexión a la base de datos
+// Crear pool de conexiones
 const pool = mysql.createPool({
-  host: process.env.MYSQL_ADDON_HOST,
-  user: process.env.MYSQL_ADDON_USER,
-  password: process.env.MYSQL_ADDON_PASSWORD,
-  database: process.env.MYSQL_ADDON_DB,
-  port: process.env.MYSQL_ADDON_PORT,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
 
 // Función para probar la conexión
-async function testConnection() {
+const testConnection = async () => {
   try {
     const connection = await pool.getConnection();
     console.log('Conexión a la base de datos establecida correctamente');
@@ -24,7 +23,7 @@ async function testConnection() {
     console.error('Error al conectar a la base de datos:', error);
     return false;
   }
-}
+};
 
 module.exports = {
   pool,
