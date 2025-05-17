@@ -1,13 +1,13 @@
 const express = require('express');
-const AuthController = require('../controllers/authController');
+const router = express.Router();
+const authController = require('../controllers/authController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-const router = express.Router();
+// Rutas públicas
+router.post('/login', authController.login);
 
-// Ruta de login
-router.post('/login', AuthController.login);
-
-// Ruta para verificar token (protegida)
-router.get('/verify', authMiddleware, AuthController.verifyToken);
+// Rutas protegidas
+router.get('/verify', authMiddleware.authenticate, authController.verifyToken);
+// Asegúrate de que authController.verifyToken sea una función, no un objeto
 
 module.exports = router;

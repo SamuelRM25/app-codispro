@@ -103,3 +103,13 @@ class AuthController {
 }
 
 module.exports = AuthController;
+
+
+// Ejemplo de cómo debería ser tu controlador
+exports.login = async (req, res) => {
+  // Implementación del login
+};
+
+exports.verifyToken = async (req, res) => {
+  // Implementación de la verificación del token
+};
